@@ -1,4 +1,6 @@
 # Floating Point Accuracy and Determinism in Solana
+> [!CAUTION]
+> WIP: Still stabilizing the results and conclusions here based on iterative testing.
 
 This project demonstrates how Solana achieves deterministic floating point operations while highlighting the precision limitations that still exist.
 
@@ -55,8 +57,7 @@ Solana's software emulation provides **deterministic precision behavior**:
 // f64 catastrophic cancellation - deterministic results
 let a = 1.0000000000000002_f64;
 let b = 1.0000000000000000_f64;
-let result = a - b;  // Gets consistent results across all validators
-// May be perfect precision or predictable precision loss
+let result = a - b;  // Gets consistent results
 ```
 
 ### Accumulation Errors (Deterministic)
@@ -89,7 +90,7 @@ let stable = (result * 1e12).round() / 1e12;  // 10^-12 precision
 
 ## Safe Float Usage Patterns
 
-### 1. Precision Truncation Strategy ⭐ **RECOMMENDED**
+### 1. Precision Truncation Strategy
 ```rust
 // For complex operations like powf(), truncate to stable precision
 let base = 1.05_f64;
