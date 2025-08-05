@@ -48,17 +48,18 @@ Inside the SVM however, these risks are mitigated.
 
 While Solana solves the **determinism problem**, precision characteristics still exist but are **more predictable** than expected:
 
-### Solana's Superior Precision
-Solana's software emulation often provides **better precision than hardware**:
+### Solana's Consistent Precision
+Solana's software emulation provides **deterministic precision behavior**:
 
 ```rust
-// f64 catastrophic cancellation - often handled perfectly
+// f64 catastrophic cancellation - deterministic results
 let a = 1.0000000000000002_f64;
 let b = 1.0000000000000000_f64;
-let result = a - b;  // May get perfect 0.0000000000000002 instead of precision loss!
+let result = a - b;  // Gets consistent results across all validators
+// May be perfect precision or predictable precision loss
 ```
 
-### Accumulation Errors (Still Present)
+### Accumulation Errors (Deterministic)
 ```rust
 // Adding 0.1 one thousand times
 let mut sum = 0.0_f32;
@@ -66,7 +67,7 @@ for _ in 0..1000 {
     sum += 0.1;
 }
 // Expected: 100.0, Actual: 99.999046 (0.1% error)
-// BUT: Identical across all validators ✓
+// Key: Identical error across all validators ✓
 ```
 
 ### The Classic 0.1 + 0.2 Problem
@@ -217,10 +218,10 @@ make test
 
 ### Solana's Emulation Addresses Floating Point Issues
 
-Our comprehensive testing reveals that **Solana's software emulation often provides superior precision** compared to hardware FPU operations:
+Our comprehensive testing reveals that **Solana's software emulation provides deterministic precision** compared to hardware FPU operations:
 
-1. **Better Catastrophic Cancellation Handling**: Operations that typically lose precision on hardware may be handled perfectly
-2. **Consistent `powf()` Behavior**: Complex operations like `powf()` produce identical results across all calls
+1. **Consistent Catastrophic Cancellation Handling**: Operations produce the same results across all validators
+2. **Deterministic `powf()` Behavior**: Complex operations like `powf()` produce identical results across all calls
 3. **Predictable Precision Patterns**: When precision loss occurs, it follows deterministic patterns
 
 ### Precision Management Validation
@@ -232,9 +233,11 @@ The precision stability tests validate advanced precision management techniques:
 
 ### Practical Implications for Developers
 
-Solana's approach demonstrates that **deterministic floating point is not only achievable but often more precise than expected**:
+Solana's approach demonstrates that **deterministic floating point is achievable with consistent precision**:
 
 - **Safe**: Float operations won't cause chain forks
+- **Predictable**: Precision behavior is consistent across all validators
+- **Manageable**: Developers can use proven precision control techniques (like the truncation strategy)
 - **Reliable**: Complex operations like compound interest and exponential calculations work reliably
 - **Manageable**: Developers can use proven precision control techniques (like the truncation strategy)
 
