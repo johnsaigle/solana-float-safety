@@ -218,7 +218,7 @@ make test
 
 ### Solana's Emulation Addresses Floating Point Issues
 
-Our comprehensive testing reveals that **Solana's software emulation provides deterministic precision** compared to hardware FPU operations:
+Our comprehensive testing reveals that **Solana's software emulation provides deterministic precision**.
 
 1. **Consistent Catastrophic Cancellation Handling**: Operations produce the same results across all validators
 2. **Deterministic `powf()` Behavior**: Complex operations like `powf()` produce identical results across all calls
@@ -247,18 +247,17 @@ Solana's approach demonstrates that **deterministic floating point is achievable
 - **Basic arithmetic**: `+`, `-`, `*`, `/` (with proper rounding)
 - **Power operations**: `powf()`, `sqrt()` (with precision truncation strategy)
 - **Trigonometric functions**: `sin()`, `cos()`, etc. (deterministic)
-- **Compound interest**: `principal * (1 + rate).powf(periods)` (round to cents)
+- **Compound interest**: `principal * (1 + rate).powf(periods)` (round to lowest unit)
 - **Percentage calculations**: With appropriate precision control
 
 ### 🛡️ Recommended Patterns
+
+Work within safe tolerance ranges:
+
 ```rust
 // Precision truncation for complex operations
 let result = base.powf(exponent);
 let stable = (result * 1e12).round() / 1e12;
-
-// Financial calculations
-let amount = principal * (1.0 + rate).powf(periods);
-let final = (amount * 100.0).round() / 100.0;  // Cent precision
 
 // Safe comparisons
 let is_equal = (a - b).abs() <= 1e-12;
