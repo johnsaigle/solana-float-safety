@@ -63,13 +63,14 @@ mod financial_precision_tests {
         let back = multiply_floats(result, divisor);
         let difference = (back - 1.0).abs();
         
-        // Document the precision behavior
+        // Document the precision behavior for logic error prevention
         msg!("Division precision test:");
         msg!("  1.0 / 3.0 = {}", result);
         msg!("  result * 3.0 = {}", back);
         msg!("  difference from 1.0 = {:.2e}", difference);
+        msg!("  ⚠️ Never use: if back == 1.0 (would fail!)");
         
-        // The key insight: precision may be better than expected in Solana
+        // The key insight: precision is manageable for financial use with proper techniques
         assert!(difference <= 1e-6, "Precision should be reasonable for financial use");
     }
 
@@ -96,11 +97,12 @@ mod financial_precision_tests {
         // Should be close to 1.0 - Solana's software emulation may be very precise
         assert!((sum - 1.0).abs() < 0.000001, "Sum should be close to 1.0");
         
-        // Document whether precision loss occurred
+        // Document logic error risk
         if difference > f32::EPSILON {
-            msg!("  Precision loss detected (expected behavior)");
+            msg!("  ⚠️ Logic error risk: if sum == 1.0 would fail!");
+            msg!("  ✅ Safe approach: if (sum - 1.0).abs() < 1e-6");
         } else {
-            msg!("  No precision loss (Solana's software emulation is very precise)");
+            msg!("  ✓ No logic error risk in this case");
         }
     }
 

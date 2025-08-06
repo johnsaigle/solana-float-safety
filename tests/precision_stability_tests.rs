@@ -6,7 +6,7 @@ mod precision_stability_tests {
 
     #[test]
     fn test_powf_precision_variation() {
-        // Truncating to 10^-12 provides stable results
+        // Demonstrates why 1e-12 truncation prevents logic errors in complex calculations
         
         let base = 1.05_f64;
         let exponent = 365.25_f64;
@@ -47,7 +47,9 @@ mod precision_stability_tests {
         let truncated_diff = (truncated1 - truncated2).abs();
         msg!("Truncated difference: {:.2e}", truncated_diff);
         
-        // The key insight: truncation reduces precision variations significantly
+        // The key insight: truncation prevents logic errors from precision variations
+        // ⚠️ Without truncation: if result1 == result2 would fail
+        // ✅ With truncation: reliable comparisons possible
         assert!(truncated_diff <= diff_12, "Truncation should reduce or maintain precision");
     }
 

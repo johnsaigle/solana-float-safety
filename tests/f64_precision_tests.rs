@@ -26,7 +26,9 @@ mod f64_precision_tests {
         println!("f64 are equal: {}", balance1_f64 == balance2_f64);
         println!("f64 difference: {}", balance2_f64 - balance1_f64);
         
-        // f64 should be able to distinguish these values
+        // f64 can distinguish these values, preventing logic errors
+        // ⚠️ Logic error risk: if balance1_f32 == balance2_f32 (true, but wrong!)
+        // ✅ f64 precision: if balance1_f64 == balance2_f64 (false, correct!)
         assert_ne!(balance1_f64, balance2_f64, "f64 should distinguish these values");
         assert!(balance2_f64 - balance1_f64 > 0.0);
     }

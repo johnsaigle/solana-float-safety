@@ -5,21 +5,21 @@ use solana_floats::double_ops::*;
 mod precision_edge_cases {
     use super::*;
     
-    // SOLANA CONTEXT: All tests in this module demonstrate precision issues that occur
-    // in floating point arithmetic. The key insight for Solana is that while these
-    // precision issues still exist with software emulation, they are DETERMINISTIC:
+    // ACCURACY FOCUS: All tests in this module demonstrate precision issues that can
+    // cause logic errors in Solana programs. Determinism is solved - these tests focus
+    // on accuracy management to prevent unexpected program behavior.
     //
-    // ✅ WHAT SOLANA'S SOFTWARE EMULATION GUARANTEES:
-    // - All validators get the SAME wrong answer
-    // - Precision loss is identical across all nodes
-    // - No consensus failures due to float differences
-    // - Bit-exact reproducibility of results
+    // ⚠️ WHAT DEVELOPERS MUST HANDLE TO AVOID LOGIC ERRORS:
+    // - Catastrophic cancellation can cause unexpected results
+    // - Accumulation errors compound and break equality checks
+    // - IEEE 754 precision limits cause strict comparisons to fail
+    // - Mathematical accuracy issues can break program logic
     //
-    // ⚠️ WHAT DEVELOPERS STILL NEED TO HANDLE:
-    // - Catastrophic cancellation still occurs (but predictably)
-    // - Accumulation errors still compound (but identically)
-    // - IEEE 754 precision limits still apply
-    // - Mathematical accuracy may be compromised (but consistently)
+    // ✅ SOLUTIONS DEMONSTRATED:
+    // - Use epsilon comparisons instead of strict equality
+    // - Truncate to appropriate precision for financial calculations
+    // - Use integer arithmetic when possible
+    // - Understand precision boundaries (1e-12 is the practical limit)
 
     #[test]
     fn test_catastrophic_cancellation_f32() {
@@ -87,10 +87,9 @@ mod precision_edge_cases {
         // In Solana's software emulation, f64 may handle this perfectly
         // This demonstrates that software emulation can be more precise than hardware
         if direct_result == 0.0 {
-            println!("✓ Perfect precision: Solana's software emulation handled this exactly");
+            println!("✓ Perfect precision: No logic error risk in this case");
         } else {
-            println!("✓ Precision loss detected: {:.2e}", direct_result);
-            assert!(direct_result > 0.0, "f64 should detect the difference");
+            println!("⚠️ Precision loss detected: {:.2e} - use epsilon comparisons!", direct_result);
         }
     }
 

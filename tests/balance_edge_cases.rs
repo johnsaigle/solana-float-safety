@@ -44,10 +44,10 @@ mod balance_edge_cases {
         let result2 = multiply_floats(max_balance, 2.0);
         println!("f32::MAX * 2.0 = {} (is_infinite: {})", result2, result2.is_infinite());
         
-        // SOLANA CONTEXT: Document the actual overflow behavior
+        // ACCURACY CONTEXT: Document overflow behavior for logic error prevention
         // Note: f32::MAX + small values might not overflow due to precision limits
         if !result.is_infinite() {
-            println!("✓ EXPECTED IN SOLANA: Adding to f32::MAX did not produce infinity!");
+            println!("⚠️ Logic error risk: if result.is_infinite() would be false!");
             println!("  This shows precision limits can mask overflow conditions!");
             println!("  CRITICAL: This behavior is DETERMINISTIC across all validators");
             println!("  All Solana nodes will experience identical precision masking");
